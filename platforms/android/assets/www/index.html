@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+    <title>Device Ready Example</title>
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/cdv-plugin-fb-connect.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/facebook-js-sdk.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/facebookConnectPlugin.js"></script>
+    <script type="text/javascript" charset="utf-8">
+
+        // Wait for device API libraries to load
+        //
+        function onLoad() {
+            document.addEventListener("deviceready", onDeviceReady, false);
+        }
+
+        // device APIs are available
+        //
+        function onDeviceReady() {
+            // Now safe to use device APIs
+            //alert("hi");
+
+
+            // code block 01 - starts
+//            if (typeof CDV === 'undefined') {
+//                alert('CDV variable does not exist. Check that you have included cdv-plugin-fb-connect.js correctly');
+//            }
+//            if (typeof FB === 'undefined') {
+//                alert('FB variable does not exist. Check that you have included the Facebook JS SDK file.');
+//            }
+//
+//            document.addEventListener('deviceready', function() {
+//                try {
+//                    FB.init({
+//                        appId: "525065307623628",
+//                        nativeInterface: CDV.FB,
+//                        useCachedDialogs: false
+//                    });
+//                } catch (e) {
+//                    alert(e);
+//                }
+//            }, false);
+            // code block 01 - ends
+
+
+            // code block 02 - starts
+            if (!window.cordova) {
+                facebookConnectPlugin.browserInit("525065307623628");
+                // version is optional. It refers to the version of API you may want to use.
+            }
+
+            var fbLoginSuccess = function (userData) {
+                alert("UserInfo: " + JSON.stringify(userData));
+                console.log("---------------------======================---------------------")
+                //console.log("userID");
+                //console.log(userData["authResponse"]["userID"]);
+                console.log("JSON.stringify(userData");
+                console.log(JSON.stringify(userData));
+
+                facebookConnectPlugin.getAccessToken(function(token) {
+                    alert("Token: " + token);
+                }, function(err) {
+                    alert("Could not get access token: " + err);
+                });
+            }
+
+            var loginButton = $('#login-with-facebook');
+
+
+            loginButton.on('click', function(e) {
+                alert("login button click");
+                e.preventDefault();
+
+//                FB.login(function(response) {
+//                    if (response.status === 'connected') {
+//                        alert('logged in');
+//                    } else {
+//                        alert('not logged in');
+//                    }
+//                },{ scope: "email" });
+
+                facebookConnectPlugin.login(["email"],
+                        fbLoginSuccess,
+                        function (error) { alert("" + error) }
+                );
+
+            });
+
+
+            // code block 02 - ends
+
+            // code block 03 - starts
+//            if ((typeof cordova == 'undefined') && (typeof Cordova == 'undefined')) alert('Cordova variable is missing. Check  cordova.js included correctly');
+//            if (typeof CDV == 'undefined') alert('CDV variable is missing. Check cdv-plugin-fb-connect.js is included correctly');
+//            if (typeof FB == 'undefined') alert('FB variable is missing. Check the Facebook JS SDK file included.');
+//
+//            //document.addEventListener('deviceready', function() {
+//                try {
+//                    alert('Device is ready! Write your app id below .For demo i put my app id there.');
+//                    FB.init({ appId: "525065307623628", nativeInterface: CDV.FB, useCachedDialogs: false });
+//                    document.getElementById('data').innerHTML = "";
+//                } catch (e) {
+//                    alert(e);
+//                }
+//            //}, false);
+//
+//
+//            function login() {
+//                alert("login() called");
+//                FB.login(
+//                        function(response) {
+//                            if (response.session) {
+//                                alert('you are logged in');
+//                            } else {
+//                                alert('you are not logged in');
+//                            }
+//                        },
+//                        { scope: "email" }
+//                );
+//            }
+            // code block 03 - ends
+        }
+
+    </script>
+</head>
+<body onload="onLoad()">
+    <h1>Hello</h1>
+    <!--<button onclick="login()">Login</button>-->
+    <!--<button onclick="getLoginStatus()">Get login</button>-->
+    <!--<button onclick="logout()">Logout</button>-->
+    <!--<div id="data">loading ...</div>-->
+    <div id="login-with-facebook">login-with-facebook</div>
+</body>
+</html>
